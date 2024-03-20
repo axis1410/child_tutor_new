@@ -1,0 +1,129 @@
+version: "3"
+
+services:
+  # Services
+  user:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./user/src:/app/src
+      - ./user/nodemon.json:/app/nodemon.json
+    container_name: user
+    depends_on:
+      - user_db
+      - rabbitmq
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./user/.env
+    command: npm run dev
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./gateway/src:/app/src
+      - ./gateway/nodemon.json:/app/nodemon.json
+    container_name: gateway
+    depends_on:
+      - user
+      - courses
+      - rabbitmq
+    expose:
+      - "3333"
+    ports:
+      - "3333:3333"
+    env_file:
+      - ./gateway/.env
+    command: npm run dev
+  courses:
+    build:
+      context: ./courses
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./courses/src:/app/src
+      - ./courses/nodemon.json:/app/nodemon.json
+    container_name: courses
+    depends_on:
+      - courses_db
+      - rabbitmq
+    expose:
+      - "3001"
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./courses/.env
+    command: npm run dev
+  word_of_the_day:
+    build:
+      context: ./word_of_the_day
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./word_of_the_day/src:/app/src
+      - ./word_of_the_day/nodemon.json:/app/nodemon.json
+    container_name: word_of_the_day
+    depends_on:
+      - word_of_the_day_db
+      - rabbitmq
+    expose:
+      - "3003"
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./word_of_the_day/.env
+    command: npm run dev
+
+  # Databases
+  user_db:
+    image: postgres:14
+    container_name: user_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user_db
+    ports:
+      - "5432:5432"
+  courses_db:
+    image: postgres:14
+    container_name: courses_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=courses_db
+    ports:
+      - "5433:5432"
+  tests_db:
+    image: postgres:14
+    container_name: tests_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tests_db
+    ports:
+      - "5434:5432"
+  word_of_the_day_db:
+    image: postgres:14
+    container_name: word_of_the_day_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=word_of_the_day_db
+    ports:
+      - "5435:5432"
+
+  # Message broker
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
