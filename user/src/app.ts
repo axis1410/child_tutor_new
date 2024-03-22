@@ -1,6 +1,12 @@
 import cors, { CorsOptions } from "cors";
 import express, { json } from "express";
-import { meRouter, signinRouter, signupRouter, verifyEmailRouter } from "./routes/index";
+import {
+  meRouter,
+  signinRouter,
+  signoutRouter,
+  signupRouter,
+  verifyEmailRouter,
+} from "./routes/index";
 
 const app = express();
 
@@ -11,10 +17,11 @@ const corsOptions: CorsOptions = {
 app.use(json());
 app.use(cors(corsOptions));
 
+app.use(meRouter);
 app.use(signupRouter);
 app.use(signinRouter);
+app.use(signoutRouter);
 app.use(verifyEmailRouter);
-app.use(meRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello from auth service");

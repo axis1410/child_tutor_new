@@ -166,4 +166,28 @@ const getUserDetails = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, user));
 });
 
-export { getUserDetails, loginUser, signupUser, verifyUserFromEmail };
+const signoutUser = asyncHandler(async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  console.log(token);
+
+  const decoded = (await jwt.verify(token!, process.env.ACCESS_TOKEN_KEY!)) as { id: string };
+
+  const user = await findUserById(decoded.id);
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      refreshToken: "",
+    },
+  });
+
+  res.status(200).json(new ApiResponse(200, { message: "User signed out" }));
+});
+
+export { getUserDetails, loginUser, signoutUser, signupUser, verifyUserFromEmail };

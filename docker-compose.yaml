@@ -1,7 +1,6 @@
 version: "3"
 
 services:
-  # Services
   user:
     build:
       context: ./user
@@ -42,6 +41,7 @@ services:
       - ./gateway/.env
     command: npm run dev
   courses:
+    restart: always
     build:
       context: ./courses
       dockerfile: Dockerfile
@@ -60,6 +60,7 @@ services:
     env_file:
       - ./courses/.env
     command: npm run dev
+
   word_of_the_day:
     build:
       context: ./word_of_the_day
@@ -82,6 +83,11 @@ services:
 
   # Databases
   user_db:
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "user_db", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:14
     container_name: user_db
     environment:
@@ -91,6 +97,11 @@ services:
     ports:
       - "5432:5432"
   courses_db:
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "courses_db", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:14
     container_name: courses_db
     environment:
@@ -100,6 +111,11 @@ services:
     ports:
       - "5433:5432"
   tests_db:
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "tests_db", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:14
     container_name: tests_db
     environment:
@@ -109,6 +125,11 @@ services:
     ports:
       - "5434:5432"
   word_of_the_day_db:
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "word_of_the_day_db", "-U", "user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:14
     container_name: word_of_the_day_db
     environment:
@@ -120,10 +141,13 @@ services:
 
   # Message broker
   rabbitmq:
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
-
-
