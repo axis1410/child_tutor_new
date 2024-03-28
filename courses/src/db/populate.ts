@@ -51,6 +51,7 @@ async function addEnglishCourse() {
         title: alphabet[i],
         description: `${alphabet[i]} is for ${words[i]}`,
         courseId: course.id,
+        category: "alphabet",
       },
     });
   }
@@ -73,6 +74,7 @@ async function addNumberCourse() {
         title: `Number ${i}`,
         description: `This is number ${i}`,
         courseId: course.id,
+        category: "numbers",
       },
     });
   }
@@ -267,6 +269,7 @@ async function addWords() {
         title: words[i].title,
         description: words[i].description,
         courseId: course.id,
+        category: "words",
       },
     });
   }

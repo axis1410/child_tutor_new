@@ -1,3 +1,4 @@
+import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { EMAIL_REGEX } from "@/constants/EmailRegEx";
 import axios from "axios";
@@ -138,13 +139,20 @@ export default function SignUpModal() {
           // @ts-ignore
           keyboardType="number-pad"
         />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
           {isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
             <Text style={styles.buttonText}>Register</Text>
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <CustomButton
+          onPress={handleSubmit(onSubmit)}
+          title="Register"
+          backgroundColor="#404ae3"
+          isLoading={isLoading}
+        />
+
         <TouchableOpacity onPress={() => router.replace("/SignInModal")}>
           <Text style={{ color: "blue", marginTop: 20 }}>Already have an account? Sign in</Text>
         </TouchableOpacity>

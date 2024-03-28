@@ -9,15 +9,18 @@ const transport = nodemailer.createTransport({
 });
 
 export async function sendMail(toEmail: string, token: string) {
+  const url = process.env.PUBLIC_URL!;
+
   const htmlString = `
-  <a target="_blank" href="http://127.0.0.1:3333/api/users/verify/${token}">
+  <a target="_blank" href="${url}/api/users/verify/${token}">
     <b>
       Click here to verify
     </b>
   </a>
   If the link does not work, then paste the following text in a new browser tab:
-  http://127.0.0.1:3333/api/users/verify/${token}
+  ${url}/api/users/verify/${token}
   `;
+
   const messageData = {
     from: "adityamailer1410@gmail.com",
     to: toEmail,

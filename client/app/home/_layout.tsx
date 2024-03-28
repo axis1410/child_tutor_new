@@ -29,7 +29,7 @@ export default function AppLayout() {
           ),
         }}
       />
-      <Tabs.Screen name="newRoute/index" options={{ href: null }} />
+      <Tabs.Screen name="newRoute" options={{ href: null, headerShown: false }} />
     </Tabs>
   );
 }

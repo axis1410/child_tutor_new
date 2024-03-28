@@ -42,7 +42,7 @@ const signupUser = asyncHandler(async (req: Request, res: Response) => {
 
   res.status(201).json(
     new ApiResponse(201, {
-      verificationUrl: `http://127.0.0.1:3333/api/users/verify/${verificationToken}`,
+      verificationUrl: `${process.env.PUBLIC_URL!}/api/users/verify/${verificationToken}`,
       createdUser: createdUser,
     })
   );
@@ -139,7 +139,6 @@ const verifyUserFromEmail = asyncHandler(async (req: Request, res: Response) => 
       const msg = JSON.stringify(user);
 
       ch.assertQueue("user_edded");
-      // ch.publish(ex, "", Buffer.from(msg));
       ch.sendToQueue("user_added", Buffer.from(msg));
       console.log(" [x] Sent %s", msg);
 

@@ -1,19 +1,35 @@
-import { StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 
 interface CustomButtonProps {
   backgroundColor?: string;
   onPress: () => void;
   title: string;
+  isLoading?: boolean;
 }
 
-export default function CustomButton({ backgroundColor, onPress, title }: CustomButtonProps) {
+export default function CustomButton({
+  backgroundColor,
+  onPress,
+  title,
+  isLoading,
+}: CustomButtonProps) {
   const { width, height } = useWindowDimensions();
 
   const styles = useDynamicStyles(width, height, backgroundColor);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
-      <Text style={styles.buttonText}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text style={styles.buttonText}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 }

@@ -5,4 +5,4 @@ const router = Router();
 
 router.post("/api/users/signout", signoutUser);
 
-export default router;
+export { router as signoutRouter };

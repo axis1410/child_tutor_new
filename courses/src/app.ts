@@ -1,9 +1,11 @@
-import express from "express";
+import express, { json } from "express";
+import { getCourseByIdRouter, getCoursesRouter } from "./routes";
 
 const app = express();
 
-app.get("/api/courses", (req, res) => {
-  res.send("Hello from courses service");
-});
+app.use(json());
+
+app.use(getCoursesRouter);
+app.use(getCourseByIdRouter);
 
 export default app;

@@ -1,7 +1,7 @@
 import CustomButton from "@/components/CustomButton";
 import { useAuth } from "@/context/AuthContext";
 import { useUser } from "@/context/UserContext";
-import { fetchUserDetails } from "@/utils/fetchUserDetails";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { router } from "expo-router";
@@ -16,13 +16,13 @@ import {
 } from "react-native";
 
 export default function HomePage() {
-  const [courseList, setCourseList] = useState([]);
+  const [courseList, setCourseList] = useState<any[]>([]);
   const [dailyWord, setDailyWord] = useState("");
   const [dailyWordMeaning, setDailyWordMeaning] = useState("");
   const [dailyWordExample, setDailyWordExample] = useState("");
 
   const { setToken, setIsLoggedIn, token } = useAuth();
-  const { fullName, setFullName, setEmail, setId } = useUser();
+  const { fullName } = useUser();
 
   const { width, height } = useWindowDimensions();
 
@@ -63,20 +63,25 @@ export default function HomePage() {
       }
     };
 
-    const fetchUser = async () => {
+    const handleFetchCourses = async () => {
+      console.log("Seinding course fetch request");
       try {
-        const userDetails = await fetchUserDetails(token!);
+        const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/courses`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        setFullName(userDetails?.fullName!);
-        setEmail(userDetails?.email!);
-        setId(userDetails?.id!);
+        console.log(response.data);
+
+        setCourseList(response.data);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchWordOfTheDay();
-    // fetchCourses();
+    handleFetchCourses();
   }, []);
 
   return (
@@ -93,13 +98,23 @@ export default function HomePage() {
 
       {courseList.map((course: any) => {
         return (
-          <TouchableOpacity key={course.id}>
+          <TouchableOpacity
+            onPress={() =>
+              router.push({ pathname: "/home/newRoute/[id]", params: { id: course.id } })
+            }
+            key={course.id}
+          >
             <View style={styles.card}>
               <Text style={styles.cardTitle}>{course.title}</Text>
             </View>
           </TouchableOpacity>
         );
       })}
+
+      <CustomButton
+        title="Testing custom route"
+        onPress={() => router.push({ pathname: "/home/newRoute/[id]", params: { id: 1 } })}
+      />
 
       <View style={styles.divider} />
 

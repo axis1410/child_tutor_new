@@ -1,3 +1,4 @@
+import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { EMAIL_REGEX } from "@/constants/EmailRegEx";
 import { useAuth } from "@/context/AuthContext";
@@ -120,13 +121,14 @@ export default function SignInPage() {
           placeholder="Enter password"
           secureTextEntry
         />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
+        {/* <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
           {isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
             <Text style={styles.buttonText}>Login</Text>
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <CustomButton onPress={handleSubmit(onSubmit)} title="Login" isLoading={isLoading} />
         <TouchableOpacity onPress={() => router.replace("/SignUpModal")}>
           <Text style={{ color: "blue", marginTop: 20 }}>New user? Register here</Text>
         </TouchableOpacity>

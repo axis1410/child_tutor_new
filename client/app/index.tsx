@@ -1,4 +1,7 @@
+import CustomButton from "@/components/CustomButton";
 import { useAuth } from "@/context/AuthContext";
+import { useUser } from "@/context/UserContext";
+import { fetchUserDetails } from "@/utils/fetchUserDetails";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
@@ -9,11 +12,13 @@ export default function HomePage() {
   const [loggedInStatus, setLoggedInStatus] = useState<boolean>(false);
 
   const { setToken, token, setIsLoggedIn, isLoggedIn } = useAuth();
+  const { setFullName, setEmail, setId } = useUser();
 
   const clearAllData = async () => {
     try {
       await AsyncStorage.multiRemove(["accessToken", "isLoggedIn"]);
     } catch (e) {
+      console.log("Error occured");
       console.log(e);
     }
   };
@@ -36,6 +41,12 @@ export default function HomePage() {
           // console.log("Token set in context");
           // console.log("\nToken: ", accessToken, "\n");
           setLoggedInStatus(true);
+
+          const userDetails = await fetchUserDetails(accessToken);
+
+          setFullName(userDetails?.fullName!);
+          setEmail(userDetails?.email!);
+          setId(userDetails?.id!);
         }
       } catch (error) {
         console.error(error);
@@ -58,15 +69,12 @@ export default function HomePage() {
         </View>
       ) : (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={() => router.push("/SignInModal")}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#404ae3" }]}
+          <CustomButton onPress={() => router.push("/SignInModal")} title="Login" />
+          <CustomButton
             onPress={() => router.push("/SignUpModal")}
-          >
-            <Text style={styles.buttonText}>Register</Text>
-          </TouchableOpacity>
+            title="Register"
+            backgroundColor="#404ae3"
+          />
         </View>
       )}
     </SafeAreaView>

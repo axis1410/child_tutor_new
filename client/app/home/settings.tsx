@@ -1,41 +1,62 @@
+import CustomButton from "@/components/CustomButton";
 import { useAuth } from "@/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function SettingsPage() {
-  const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { token, setToken, setIsLoggedIn } = useAuth();
 
-  const { token } = useAuth();
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios({
+        method: "post",
+        url: `${process.env.EXPO_PUBLIC_API_URL}/api/users/signout`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  useEffect(() => {
-    const getUserDetails = async () => {
-      console.log("Fetching user details");
-      try {
-        const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/users/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      console.log(response.data);
 
-        setUserId(response.data.data.id);
-        setEmail(response.data.data.email);
-        setFullName(response.data.data.fullName);
+      if (response.status === 200) {
+        setToken("");
+        setIsLoggedIn(false);
 
-        console.log(fullName);
-      } catch (error) {
-        console.log(error);
+        await AsyncStorage.multiRemove(["accessToken", "isLoggedIn"]);
+
+        router.replace("/");
       }
-    };
-
-    getUserDetails();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <View>
+    <ScrollView>
       <Text>SettingsPage</Text>
-    </View>
+      <View
+        style={{
+          alignSelf: "center",
+        }}
+      >
+        <CustomButton
+          isLoading={isLoading}
+          onPress={handleLogout}
+          title="Logout"
+          backgroundColor="#fc0352"
+        />
+      </View>
+    </ScrollView>
   );
+}
+
+function useDynamicStyles(width: number, height: number) {
+  return StyleSheet.create({});
 }

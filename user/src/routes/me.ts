@@ -5,4 +5,4 @@ const router = Router();
 
 router.get("/api/users/me", getUserDetails);
 
-export default router;
+export { router as meRouter };
