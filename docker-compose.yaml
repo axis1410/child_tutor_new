@@ -152,6 +152,7 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+
 volumes:
   user_db_data:
   courses_db_data:
