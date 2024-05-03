@@ -17,18 +17,14 @@ export async function generateWord() {
   for (let i = 0; i < existingWords.length; i++) {
     listOfWords.push(existingWords[i].word);
   }
-  console.log(listOfWords);
 
   const prompt = `You have already given me that word. Give me a unique interesting word that is not a part of ${listOfWords}, its meaning, and also an example sentence in json format such that it looks like {word, meaning, example}. The word should be understandable by children of age group 10-12. Send the response in json format and do not send backticks in the response. send pure json`;
-
-  console.log(prompt);
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
 
   const jsonResponse = JSON.parse(text);
-  console.log(jsonResponse);
 
   const existingWord = await prisma.word.findFirst({
     where: {

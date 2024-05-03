@@ -22,7 +22,7 @@ export async function sendMail(toEmail: string, token: string) {
   `;
 
   const messageData = {
-    from: "adityamailer1410@gmail.com",
+    from: process.env.MAIL_USER,
     to: toEmail,
     subject: "Verify Email ✔",
     text: "Click the link to verify email. The link is valid for 1 day.",

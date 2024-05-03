@@ -1,4 +1,4 @@
-import express, { Express, json } from "express";
+import { Express } from "express";
 import cron from "node-cron";
 import prisma from "../prisma/prisma";
 import app from "./app";
@@ -13,7 +13,7 @@ async function start(app: Express) {
   });
 
   cron.schedule(
-    "52 10 * * *", // 10:06 PM IST
+    "52 10 * * *", // Repeat every day at 10:52 AM
     () => {
       generateWord();
     },

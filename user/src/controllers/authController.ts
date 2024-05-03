@@ -93,7 +93,6 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
       const msg = JSON.stringify(signedInUser);
 
       ch.assertQueue("user_sign_in");
-      // ch.publish(ex, "", Buffer.from(msg));
       ch.sendToQueue("user_sign_in", Buffer.from(msg));
       console.log(" [x] Sent %s", msg);
 
