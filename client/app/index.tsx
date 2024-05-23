@@ -23,9 +23,9 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    clearAllData();
-  }, []);
+  // useEffect(() => {
+  //   clearAllData();
+  // }, []);
 
   useEffect(() => {
     const getLoggedInKey = async () => {

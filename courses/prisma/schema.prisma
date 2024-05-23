@@ -23,6 +23,7 @@ model CourseContent {
   id          Int     @id @default(autoincrement())
   title       String
   description String
+  imageUrl    String?
   category    String?
 
   courseId Int
