@@ -28,6 +28,14 @@ export default function HomePage() {
 
   const styles = useDynamicStyles(width, height);
 
+  const handleGoToCourse = async (courseId: number) => {
+    // const response = await axios.get(`${process.env.EXPO_PUBLIC_API_URL}/api/courses/${courseId}`);
+
+    // console.log(response.data);
+
+    router.push({ pathname: "/home/newRoute/[id]", params: { id: courseId } });
+  };
+
   const handleLogout = async () => {
     const response = await axios({
       method: "post",
@@ -98,23 +106,13 @@ export default function HomePage() {
 
       {courseList.map((course: any) => {
         return (
-          <TouchableOpacity
-            onPress={() =>
-              router.push({ pathname: "/home/newRoute/[id]", params: { id: course.id } })
-            }
-            key={course.id}
-          >
+          <TouchableOpacity onPress={() => handleGoToCourse(course.id)} key={course.id}>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>{course.title}</Text>
             </View>
           </TouchableOpacity>
         );
       })}
-
-      <CustomButton
-        title="Testing custom route"
-        onPress={() => router.push({ pathname: "/home/newRoute/[id]", params: { id: 1 } })}
-      />
 
       <View style={styles.divider} />
 

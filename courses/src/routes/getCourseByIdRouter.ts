@@ -3,8 +3,8 @@ import prisma from "../../prisma/prisma";
 
 const router = Router();
 
-router.get("/api/courses/:category", async (req, res) => {
-  const courseId = req.params.category;
+router.get("/api/courses/:courseId", async (req, res) => {
+  const courseId = req.params.courseId;
 
   const course = await prisma.courseContent.findMany({
     where: {

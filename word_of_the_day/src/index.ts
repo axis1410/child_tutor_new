@@ -13,7 +13,7 @@ async function start(app: Express) {
   });
 
   cron.schedule(
-    "52 10 * * *", // Repeat every day at 10:52 AM
+    "22 17 * * *", // Repeat every day at 10:52 AM
     () => {
       generateWord();
     },

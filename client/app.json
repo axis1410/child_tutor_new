@@ -1,5 +1,8 @@
 {
   "expo": {
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "name": "client",
     "slug": "client",
     "version": "1.0.0",
